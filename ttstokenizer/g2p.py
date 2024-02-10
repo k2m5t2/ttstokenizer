@@ -28,6 +28,7 @@ except LookupError:
 
 dirname = os.path.dirname(__file__)
 
+# NOTE homographs = words with same spelling but different meanings/pronunciations depending on use/context
 def construct_homograph_dictionary():
     f = os.path.join(dirname,'homographs.en')
     homograph2features = dict()
@@ -48,9 +49,11 @@ def construct_homograph_dictionary():
 #     print(text)
 #     return text.split()
 
+# Grapheme to Phoneme
 class G2p(object):
     def __init__(self):
         super().__init__()
+        # Define the grapheme and phoneme sets
         self.graphemes = ["<pad>", "<unk>", "</s>"] + list("abcdefghijklmnopqrstuvwxyz")
         self.phonemes = ["<pad>", "<unk>", "<s>", "</s>"] + ['AA0', 'AA1', 'AA2', 'AE0', 'AE1', 'AE2', 'AH0', 'AH1', 'AH2', 'AO0',
                                                              'AO1', 'AO2', 'AW0', 'AW1', 'AW2', 'AY0', 'AY1', 'AY2', 'B', 'CH', 'D', 'DH',
@@ -61,22 +64,28 @@ class G2p(object):
                                                              'OW2', 'OY0', 'OY1', 'OY2', 'P', 'R', 'S', 'SH', 'T', 'TH',
                                                              'UH0', 'UH1', 'UH2', 'UW',
                                                              'UW0', 'UW1', 'UW2', 'V', 'W', 'Y', 'Z', 'ZH']
+        
+        # Creating mapping from grapheme/phoneme to index and vice versa
         self.g2idx = {g: idx for idx, g in enumerate(self.graphemes)}
         self.idx2g = {idx: g for idx, g in enumerate(self.graphemes)}
 
         self.p2idx = {p: idx for idx, p in enumerate(self.phonemes)}
         self.idx2p = {idx: p for idx, p in enumerate(self.phonemes)}
 
+        # Load CMU pronouncnig dictionary 
         self.cmu = cmudict.dict()
         self.load_variables()
+        # homograph dictionary
         self.homograph2features = construct_homograph_dictionary()
 
+    # Function to load model weights and biases for the neural network
     def load_variables(self):
         self.variables = np.load(os.path.join(dirname,'checkpoint20.npz'))
-        self.enc_emb = self.variables["enc_emb"]  # (29, 64). (len(graphemes), emb)
-        self.enc_w_ih = self.variables["enc_w_ih"]  # (3*128, 64)
-        self.enc_w_hh = self.variables["enc_w_hh"]  # (3*128, 128)
-        self.enc_b_ih = self.variables["enc_b_ih"]  # (3*128,)
+        # Assigning weights and biases for encoder and decoder from loaded variables
+        self.enc_emb = self.variables["enc_emb"]  # Embedding matrix for encoder # (29, 64). (len(graphemes), emb)
+        self.enc_w_ih = self.variables["enc_w_ih"]  # Embedding matrix for encoder # (3*128, 64)
+        self.enc_w_hh = self.variables["enc_w_hh"]  # Input-hidden weights for encoder GRU # (3*128, 128)
+        self.enc_b_ih = self.variables["enc_b_ih"]  # Hiddenhidden weights for encoder GRU # (3*128,)
         self.enc_b_hh = self.variables["enc_b_hh"]  # (3*128,)
 
         self.dec_emb = self.variables["dec_emb"]  # (74, 64). (len(phonemes), emb)
@@ -87,9 +96,11 @@ class G2p(object):
         self.fc_w = self.variables["fc_w"]  # (74, 128)
         self.fc_b = self.variables["fc_b"]  # (74,)
 
+    # sigmoid activation function
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
 
+    # define GRU network computation
     def grucell(self, x, h, w_ih, w_hh, b_ih, b_hh):
         rzn_ih = np.matmul(x, w_ih.T) + b_ih
         rzn_hh = np.matmul(h, w_hh.T) + b_hh
@@ -105,6 +116,7 @@ class G2p(object):
 
         return h
 
+    # define GRU network computation
     def gru(self, x, steps, w_ih, w_hh, b_ih, b_hh, h0=None):
         if h0 is None:
             h0 = np.zeros((x.shape[0], w_hh.shape[1]), np.float32)
@@ -115,6 +127,7 @@ class G2p(object):
             outputs[:, t, ::] = h
         return outputs
 
+    # function to encode a word into its grapheme indices
     def encode(self, word):
         chars = list(word) + ["</s>"]
         x = [self.g2idx.get(char, self.g2idx["<unk>"]) for char in chars]
@@ -122,6 +135,7 @@ class G2p(object):
 
         return x
 
+    # function to predict the phoneme sequence for a word
     def predict(self, word):
         # encoder
         enc = self.encode(word)
@@ -145,6 +159,7 @@ class G2p(object):
         preds = [self.idx2p.get(idx, "<unk>") for idx in preds]
         return preds
 
+    # main function to convert text to phonemes
     def __call__(self, text):
         # preprocessing
         text = unicode(text)
@@ -161,7 +176,7 @@ class G2p(object):
         tokens = pos_tag(words)  # tuples of (word, tag)
 
         # steps
-        prons = []
+        prons = [] # NOTE pronunciation
         for word, pos in tokens:
             if re.search("[a-z]", word) is None:
                 pron = [word]
@@ -183,6 +198,7 @@ class G2p(object):
         return prons[:-1]
 
 if __name__ == '__main__':
+    # test code to convert given text to phonemes
     texts = ["I have $250 in my pocket.", # number -> spell-out
              "popular pets, e.g. cats and dogs", # e.g. -> for example
              "I refuse to collect the refuse around here.", # homograph

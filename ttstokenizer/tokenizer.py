@@ -59,11 +59,13 @@ class TTSTokenizer(G2p):
         ]]
 
     def __call__(self, text):
+        text_orig = text # DEBUG
+
         # Normalize text
         text = self.normalize(text)
 
         # Convert to phonemes
-        tokens = super().__call__(text)
+        tokens = super().__call__(text) # NOTE important
 
         # Remove whitespace tokens
         if self.nospace:
