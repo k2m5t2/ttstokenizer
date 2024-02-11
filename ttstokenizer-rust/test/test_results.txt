@@ -1,0 +1,150 @@
+- original: assertive
+  pronunciation_1: AH0 S ER1 T IH0 V
+  pronunciation_2: AH0 S ER1 T IH0 V
+- original: confronted
+  pronunciation_1: K AH0 N F R AH1 N T AH0 D
+  pronunciation_2: K AH0 N F R AH1 N T AH0 D
+- original: dispute
+  pronunciation_1: D IH0 S P Y UW1 T
+  pronunciation_2: D IH0 S P Y UW1 T
+- original: handle
+  pronunciation_1: HH AE1 N D AH0 L
+  pronunciation_2: HH AE1 N D
+- original: suppress
+  pronunciation_1: S AH0 P R EH1 S
+  pronunciation_2: S AH0 P R EH1 S
+- original: muffler
+  pronunciation_1: M AH1 F L ER0
+  pronunciation_2: M AH1 F L ER0
+- original: Jamie
+  pronunciation_1: DNE
+  pronunciation_2: EY1 M IY0
+- original: tuition
+  pronunciation_1: T Y UW0 IH1 SH AH0 N
+  pronunciation_2: T UW0 IH1 SH AH0 N
+- original: college
+  pronunciation_1: K AA1 L IH0 JH
+  pronunciation_2: K AA1 L IH0 JH
+- original: worrying
+  pronunciation_1: W ER1 IY0 IH0 NG
+  pronunciation_2: W ER1 IY0 IH0 NG
+- original: melodrama
+  pronunciation_1: M EH1 L AH0 D R AA2 M AH0
+  pronunciation_2: M EH2 L AH0 D R AA1 M AH0
+- original: concerns
+  pronunciation_1: K AH0 N S ER1 N Z
+  pronunciation_2: K AA1 N S ER0 N Z
+- original: specimen
+  pronunciation_1: S P EH1 S AH0 M AH0 N
+  pronunciation_2: S P EH1 S AH0 M AH0 N
+- original: Pennsylvania
+  pronunciation_1: DNE
+  pronunciation_2: EH2 N S AH0 L V EY1 N IY0 AH0
+- original: psychologists
+  pronunciation_1: S AY0 K AA1 L AH0 JH AH0 S T S
+  pronunciation_2: S AY0 K AA1 L AH0 JH AH0 S T S
+- original: research
+  pronunciation_1: R IY0 S ER1 CH
+  pronunciation_2: R IY1 S CH ER0
+- original: anxiety
+  pronunciation_1: AE0 NG Z AY1 AH0 T IY0
+  pronunciation_2: AE1 NG K Y AH0 S T IY0
+- original: neurotic
+  pronunciation_1: N UH0 R AA1 T IH0 K
+  pronunciation_2: N UH0 R AA1 T IH0 K
+- original: mulling
+  pronunciation_1: M AH1 L IH0 NG
+  pronunciation_2: M AH1 L IH0 NG
+- original: employing
+  pronunciation_1: EH0 M P L OY1 IH0 NG
+  pronunciation_2: EH0 M P L OY1 IH0 NG
+- original: constructive
+  pronunciation_1: K AH0 N S T R AH1 K T IH0 V
+  pronunciation_2: K AH0 N S T R AH1 K T IH0 V
+- original: reflection
+  pronunciation_1: R IH0 F L EH1 K SH AH0 N
+  pronunciation_2: R IH0 F L EH1 K SH AH0 N
+- original: solution
+  pronunciation_1: S AH0 L UW1 SH AH0 N
+  pronunciation_2: S AH0 L UW1 SH AH0 N
+- original: indeed
+  pronunciation_1: IH2 N D IY1 D
+  pronunciation_2: IH1 N D EH2 D
+- original: reaction
+  pronunciation_1: R IY0 AE1 K SH AH0 N
+  pronunciation_2: R IY0 AE1 K SH AH0 N
+- original: underlies
+  pronunciation_1: AH2 N D ER0 L AY1 Z
+  pronunciation_2: AH1 N D ER0 L IY0 Z
+- original: essential
+  pronunciation_1: EH0 S EH1 N SH AH0 L
+  pronunciation_2: EH0 S EH1 N SH AH0 L
+- original: course
+  pronunciation_1: K AO1 R S
+  pronunciation_2: K AO1 R S
+- original: emotional
+  pronunciation_1: IH0 M OW1 SH AH0 N AH0 L
+  pronunciation_2: IH0 M OW1 SH AH0 N AH0 L
+- original: attention
+  pronunciation_1: AH0 T EH1 N SH AH0 N
+  pronunciation_2: AH0 T EH1 N SH AH0 N
+- original: ignore
+  pronunciation_1: IH2 G N AO1 R
+  pronunciation_2: IH0 G N AO1 R
+- original: anything
+  pronunciation_1: EH1 N IY0 TH IH2 NG
+  pronunciation_2: EH1 N IY0 TH IH2 NG
+- original: time
+  pronunciation_1: T AY1 M
+  pronunciation_2: T AY1 M
+- original: sense
+  pronunciation_1: S EH1 N S
+  pronunciation_2: S EH1 N S
+- original: rehearsal
+  pronunciation_1: R IH0 HH ER1 S AH0 L
+  pronunciation_2: R IY0 HH ER1 S AH0 L
+- original: positive
+  pronunciation_1: P AA1 Z AH0 T IH0 V
+  pronunciation_2: P AH0 Z IH1 T IH0 V
+- original: anticipating
+  pronunciation_1: AE0 N T IH1 S AH0 P EY2 T IH0 NG
+  pronunciation_2: AE0 N T IH1 S AH0 P EY2 T IH0 NG
+- original: difficulty
+  pronunciation_1: D IH1 F AH0 K AH0 L T IY0
+  pronunciation_2: D IH1 F IH0 K AH0 L T IY0
+- original: repetitive
+  pronunciation_1: R IH0 P EH1 T IH0 T IH0 V
+  pronunciation_2: R IH0 P EH1 T IH0 T IH0 V
+- original: recycle
+  pronunciation_1: R IY0 S AY1 K AH0 L
+  pronunciation_2: R IY1 S K AH0 L
+- original: analysis
+  pronunciation_1: AH0 N AE1 L AH0 S AH0 S
+  pronunciation_2: AH0 N AE1 L AH0 S AH0 S
+- original: attributes
+  pronunciation_1: AE1 T R AH0 B Y UW2 T S
+  pronunciation_2: AE1 T R AH0 B Y UW2 T S
+- original: hijacking
+  pronunciation_1: HH AY1 JH AE2 K IH0 NG
+  pronunciation_2: HH AY1 JH AE2 K IH0 NG
+- original: uncontrollable
+  pronunciation_1: AH2 N K AH0 N T R OW1 L AH0 B AH0 L
+  pronunciation_2: AH2 N K AH0 N T R OW1 L AH0 B AH0 L
+- original: generate
+  pronunciation_1: JH EH1 N ER0 EY2 T
+  pronunciation_2: JH EH1 N ER0 EY2 T
+- original: steady
+  pronunciation_1: S T EH1 D IY0
+  pronunciation_2: S T EH1 D IY0
+- original: reason
+  pronunciation_1: R IY1 Z AH0 N
+  pronunciation_2: R IY1 Z AH0 N
+- original: single
+  pronunciation_1: S IH1 NG G AH0 L
+  pronunciation_2: S IH1 NG G AH0 L
+- original: view
+  pronunciation_1: V Y UW1
+  pronunciation_2: V Y UW1
+- original: topic
+  pronunciation_1: T AA1 P IH0 K
+  pronunciation_2: T AA1 P IH0 K
