@@ -40,6 +40,11 @@ struct TestResults {
   words: Vec<Comparison>,
 }
 
+struct PhonemeTokenIndex {
+  token_idx: i32,
+  phoneme: String,
+}
+
 // fn pron_to_string(cmudict_fast_pron: cmudict_fast::Rule) -> String {
 fn pron_to_string(cmudict_fast_pron: &[cmudict_fast::Symbol]) -> String {
     // Convert Symbol to String or &str Before Joining: If Symbol does not directly support join, you may need to map each Symbol to a String or &str first. 
@@ -70,10 +75,10 @@ fn main() {
   // let pronunciation = result.unwrap().pronunciation(); // original cmudict library
 
   // print!{"{:?}", pronunciation}; // Rule { label: "abounds", pronunciation: [AH(None), B, AW(Primary), N, D, Z] }
-  print!{"{:?}", pronunciation.pronunciation()}; 
-  print!{"{:?}", pronunciation.pronunciation()[0]};
+  // print!{"{:?}", pronunciation.pronunciation()}; 
+  // print!{"{:?}", pronunciation.pronunciation()[0]};
 
-  let firstPhoneme = &pronunciation.pronunciation()[0]; // ERROR due to borrowing
+  // let firstPhoneme = &pronunciation.pronunciation()[0]; // ERROR due to borrowing
 
 
   // // G2P using prediction model (backup)
@@ -84,54 +89,67 @@ fn main() {
   //       .collect::<Vec<String>>());    
 
   
-  // // read ljspeech config file (which maps phoneme into token indices)
-  // let file_path: &str = "./src/ljspeech_config.yaml";
-  // let ljspeech_config = fs::read_to_string(file_path).expect("Couldn't read ljspeech_config");
-  // // let deserialized_map: BTreeMap<String, f64> = serde_yaml::from_str(&file_path)?; 
-  // // let deserialized_map: BTreeMap<String, f64> = serde_yaml::from_str(&file_path).unwrap(); // 
-  // // let deserialized_map: BTreeMap<String, f64> = serde_yaml::from_str(&ljspeech_config).expect("Couldn't make ljspeech_config"); 
-  // let deserialized_map: Config = serde_yaml::from_str(&ljspeech_config).expect("Couldn't make ljspeech_config"); 
-  
-  // print!{"{:?}", deserialized_map};
+  // read ljspeech config file (which maps phoneme into token indices)
+  let ljspeech_config_str = fs::read_to_string("./src/ljspeech_config.yaml").expect("Couldn't read ljspeech_config");
+  let ljspeech_config: Config = serde_yaml::from_str(&ljspeech_config_str).expect("Couldn't make ljspeech_config"); 
+  // print!{"{:?}", ljspeech_config}; // phoneme list: ljspeech_config.token.list
 
-  // map phoneme to token indices then output
-  
-  print!{"{:?}", "123"};
+  let mut phonemes: Vec<PhonemeTokenIndex> = Vec::new();
 
-  // test equality / relationship of different G2P methods
-  let test_file: String = fs::read_to_string("./test/words.yaml").expect("Couldn't read word test file");
-  let word_collection: WordList = serde_yaml::from_str(&test_file).expect("Couldn't deserialize word test file"); 
-
-  let wordlength: usize = word_collection.words.len();
-  // let comparisons: vec![Comparison; wordlength];
-  let mut comparisons: Vec<Comparison> = Vec::new();
-
-  for word in word_collection.words {
-    let result_1 = dict.get(&word);
-    // assert!(result_1.is_some());
-    // let pronunciation_1 = result_1.unwrap().first().unwrap(); // cmudict_fast library // NOTE fails upon unwrap() if word is not contained in cmudict
-    
-    let pronunciation_1 = result_1
-      .and_then(|r| r.first()) // Use and_then to access the first item if result_1 is Some
-      .map(|pronunciation| pron_to_string(pronunciation.pronunciation())) // Transform pronunciation to a String
-      .unwrap_or_else(|| "DNE".to_string()); // Provide an empty string if None
-
-    print!{"{:?}", pronunciation.pronunciation()};
-    let result_2 = convert_to_phoneme(&word);
-    print!{"{:?}", result};
-
-    let comparison = Comparison {
-      original: word,
-      pronunciation_1: pronunciation_1,
-      pronunciation_2: result_2.unwrap().join(" "),
-    };
-
-    comparisons.push(comparison);
-    
+  for (idx, val) in ljspeech_config.token.list.iter().enumerate() {
+    phonemes.push(PhonemeTokenIndex {
+      token_idx: idx as i32,
+      phoneme: val.to_string(),
+    });
   }
 
-  let test_result_yaml = serde_yaml::to_string(&comparisons).unwrap();
-  fs::write("./test/test_results.txt", test_result_yaml).unwrap();
+  // map phoneme to token indices then output
+
+  let mut token_output: Vec<i32> = Vec::new();
+  
+  for syllable in pronunciation.pronunciation() {
+    for phoneme_token in &phonemes {
+      if phoneme_token.phoneme == syllable.to_string() {
+        token_output.push(phoneme_token.token_idx);
+      }
+    }
+  }
+  print!{"{:?}", token_output};
+
+  // // test equality / relationship of different G2P methods
+  // let test_file: String = fs::read_to_string("./test/words.yaml").expect("Couldn't read word test file");
+  // let word_collection: WordList = serde_yaml::from_str(&test_file).expect("Couldn't deserialize word test file"); 
+
+  // let wordlength: usize = word_collection.words.len();
+  // // let comparisons: vec![Comparison; wordlength];
+  // let mut comparisons: Vec<Comparison> = Vec::new();
+
+  // for word in word_collection.words {
+  //   let result_1 = dict.get(&word);
+  //   // assert!(result_1.is_some());
+  //   // let pronunciation_1 = result_1.unwrap().first().unwrap(); // cmudict_fast library // NOTE fails upon unwrap() if word is not contained in cmudict
+    
+  //   let pronunciation_1 = result_1
+  //     .and_then(|r| r.first()) // Use and_then to access the first item if result_1 is Some
+  //     .map(|pronunciation| pron_to_string(pronunciation.pronunciation())) // Transform pronunciation to a String
+  //     .unwrap_or_else(|| "DNE".to_string()); // Provide an empty string if None
+
+  //   print!{"{:?}", pronunciation.pronunciation()};
+  //   let result_2 = convert_to_phoneme(&word);
+  //   print!{"{:?}", result};
+
+  //   let comparison = Comparison {
+  //     original: word,
+  //     pronunciation_1: pronunciation_1,
+  //     pronunciation_2: result_2.unwrap().join(" "),
+  //   };
+
+  //   comparisons.push(comparison);
+    
+  // }
+
+  // let test_result_yaml = serde_yaml::to_string(&comparisons).unwrap();
+  // fs::write("./test/test_results.txt", test_result_yaml).unwrap();
 
 }
 
