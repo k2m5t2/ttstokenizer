@@ -2,7 +2,11 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
 
+use console_error_panic_hook;
+use std::panic;
+
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsValue;
 
 use grapheme_to_phoneme::Model; // prediction-based g2p model
 use grapheme_to_phoneme::GraphToPhoneError;
@@ -17,6 +21,11 @@ use std::collections::BTreeMap;
 // read ljspeech_config.yaml
 use serde::{Serialize, Deserialize};
 use serde_yaml;
+
+#[wasm_bindgen]
+pub fn init_panic_hook() {
+  panic::set_hook(Box::new(console_error_panic_hook::hook));
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Config {
@@ -59,8 +68,11 @@ impl G2PConverter {
   // TODO make the cmudict path argument optional (i.e., override?)
   fn new(mut cmudict_path: &str) -> Result<Self, Box<dyn std::error::Error>> {
     // initiate cmudict & g2p model
+    include_str!("./cmudict.dict");
+    // if cmudict_path.is_empty() { cmudict_path = "./src/cmudict.dict"; }
     if cmudict_path.is_empty() { cmudict_path = "./src/cmudict.dict"; }
     let cmudict = Cmudict::new(cmudict_path)?;
+    // TODO make it download from the internet
     let g2p_model = Model::load_in_memory()?;
     Ok(Self { cmudict, g2p_model })
   }
@@ -144,16 +156,28 @@ pub struct Processor {
 
 #[wasm_bindgen]
 impl Processor {
-  pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
-    let g2p_converter = G2PConverter::new("")?;
-    let tokenizer = Tokenizer::new("")?;
-    Ok(Self { g2p_converter, tokenizer })
+  pub fn new() -> Processor {
+    let g2p_converter = G2PConverter::new("").expect("Failed to create G2PConverter");
+    let tokenizer = Tokenizer::new("").expect("Failed to create Tokenizer");
+    Self { g2p_converter, tokenizer }
   }
 
-  pub fn convert(&self, text: &str) -> Result<Vec<i32>, Box<dyn std::error::Error>> {
-    let phonemes = self.g2p_converter.convert(text)?;
-    let token_indices = self.tokenizer.to_token_indices(phonemes);
-    Ok(token_indices)
+  #[wasm_bindgen] // NOTE not sure if needed - top-level struct only or methdos too?
+  // pub fn convert(&self, text: &str) -> Result<Vec<i32>, Box<dyn std::error::Error>> {
+  pub fn process(&self, text: &str) -> JsValue {
+    let phonemes = self.g2p_converter.convert(text);
+    match phonemes {
+      Ok(phonemes) => {
+        let token_indices = self.tokenizer.to_token_indices(phonemes);
+        // return JsValue::from_serde(&token_indices).unwrap();
+        return serde_wasm_bindgen::to_value(&token_indices).unwrap_or(JsValue::UNDEFINED);
+      },
+      Err(e) => {
+        return JsValue::from_str(&format!("Error converting text: {:?}", e));
+      }
+    }
+    // let phonemes = self.g2p_converter.convert(text);
+    // let token_indices = self.tokenizer.to_token_indices(phonemes);
   }
 }
 
